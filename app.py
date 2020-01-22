@@ -22,6 +22,7 @@ formatter = logging.Formatter('%(name)s - %(asctime)-15s - %(levelname)s: %(mess
 logzero.formatter(formatter)
 
 
+
 def get_config():
     """
     获取配置文件

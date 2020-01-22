@@ -15,8 +15,15 @@ source venv/bin/activate  激活虚拟环境
 deactivate 退出虚拟环境
 ```
 
-# 运行命令
+# 本地调试
+```
+python3 manage.py runserver
+```
+
+# gunicorn运行命令
+```
 gunicorn -w 1 -b 0.0.0.0:5000 manage:app -D
+```
 
 # docker构建
 ```angular2html
