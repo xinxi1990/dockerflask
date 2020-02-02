@@ -23,6 +23,7 @@ from flask import Blueprint, render_template, abort
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager, login_required, login_user, logout_user,current_user
 
 
 
@@ -78,6 +79,14 @@ app.config.from_object(Config)
 db = SQLAlchemy(app) #初始化数据库
 db.create_all()
 
+
+# 获取登录管理对象
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "app.login"
+login_manager.login_message = 'Unauthorized User'
+# 设置闪现的错误消息的类别
+login_manager.login_message_category = "info"
 
 def get_config():
     """

@@ -11,7 +11,7 @@ from redis import Redis
 from logzero import setup_logger
 from datetime import timedelta
 from werkzeug.utils import secure_filename
-from flask import Flask,make_response,request,redirect,url_for
+from flask import Flask,make_response,request,redirect,url_for,flash
 from flask import Flask, session
 from flask_session import Session
 from flask_script import Manager
@@ -23,9 +23,11 @@ from flask import Blueprint, render_template, abort
 from views.form.userform import UserForm
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import LoginManager, login_required, login_user, logout_user,current_user
 from flask_sqlalchemy import SQLAlchemy
 from main import config
 from main import logger
+from main import db,app
 from views.models.user import UserModels
 
 base = Blueprint('app', __name__, url_prefix='/app')
@@ -147,13 +149,83 @@ def register():
             # 获取验证通过后的数据
             username = form.username.data
             password = form.password.data
+            password2 = form.password.data
             # 保存
-            user = UserModels()
+            user = UserModels(username,password,password2)
             user.username = username
             user.password = generate_password_hash(password)
-            user.save()
-            return redirect(url_for('user.login'))
+            # user.save()
+            logger.info("准备保存到数据库...")
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('app.login'))
         return render_template('register.html', form=form)
 
 
 
+# @base.route('/login')
+# def login():
+#     logger.info("login")
+#     return render_template('login.html')
+
+
+
+@base.route('/login/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        # 校验用户名和密码是否填写完成
+        if not all([username, password]):
+            return render_template('login.html')
+        # 通过用户名获取用户对象
+        user = UserModels.query.filter_by(username=username).first()
+        print(user)
+        # 校验密码是否正确
+        if check_password_hash(user.password, password):
+            # 实现登录
+            # login_user()能够将已登录并通过load_user()的用户对应的User对象保存在session中
+            # 在session中会创建一个键值对，key为user_id，value为当前登录用户的id值
+            # 如果希望应用记住用户的登录状态, 只需要为 login_user()的形参 remember 传入 True 实参就可以了.
+            login_user(user)
+            print("########## login over #########")
+            return redirect(url_for('app.index'))
+        else:
+            flash('用户名或者密码错误')
+
+        return redirect(url_for('index'))
+
+
+
+@base.route('/index/')
+@login_required
+def index():
+    print("####### index ############")
+    return render_template('index.html')
+
+
+
+
+# @base.route('/logout', methods=['POST'])
+# def logout():
+#     try:
+#         logout_user()
+#         results = {}
+#         results['code'] = 0
+#         results['msg'] = '退出成功'
+#         response = json.dumps(results, indent=4)
+#         return make_response(response)
+#     except Exception as e:
+#         logger.error('发生了错误，error: {}'.format(e))
+#         abort(500)
+
+
+# 退出
+@base.route('/logout/', methods=['GET'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
