@@ -34,3 +34,13 @@ docker build -t docker_flask:v1 .
 ```angular2html
 docker run -d -p 5000:5000 -v ${home}/files:/files  docker_flask:v1
 ```
+
+
+# 创建数据库
+```angular2html
+python3 manage.py shell
+
+from main import db
+
+db.create_all()
+```
