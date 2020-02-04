@@ -103,4 +103,6 @@ config = get_config()
 
 # 创建蓝图
 from views import appviews
+from views import loginviews
 app.register_blueprint(appviews.base)
+app.register_blueprint(loginviews.uer_login)
