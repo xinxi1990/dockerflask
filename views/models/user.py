@@ -9,12 +9,7 @@
 
 """
 
-from flask_login import UserMixin
-from sqlalchemy import Column,Integer,String
-from flask_sqlalchemy import SQLAlchemy
-from main import app
-from main import db
-from main import login_manager
+from views.models import *
 
 
 
@@ -58,3 +53,6 @@ def load_user(user_id):
     # 这个函数在login_user(user)存储当前登录用户到session中时，会被调用
     # 在每次访问地址的时候都被被调用，用于向请求上下文中绑定当前登录的用户信息
     return UserModels.query.get(user_id)
+
+
+

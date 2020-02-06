@@ -4,7 +4,10 @@
 from flask_script import Manager, Server
 from flask_script.commands import ShowUrls, Clean
 from flask_script import Manager
+
 from main import app,db
+
+from views.models import gradle,student,course
 
 host = '127.0.0.1'
 #host = '192.168.1.112'
@@ -37,6 +40,7 @@ def myprint():
 @manager.command
 def create_db():
     db.create_all()
+
 
 
 if __name__ == '__main__':

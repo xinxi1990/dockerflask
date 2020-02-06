@@ -43,4 +43,15 @@ python3 manage.py shell
 from main import db
 
 db.create_all()
+
+python3 manage.py create_db
+
 ```
+
+# supervisor
+```angular2html
+sudo supervisord -c supervisord.conf
+
+sudo supervisorctl status
+```
+  

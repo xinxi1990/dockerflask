@@ -7,6 +7,7 @@ import json
 import logging
 import logzero
 import time
+import copy
 from redis import Redis
 from logzero import setup_logger
 from datetime import timedelta
@@ -39,9 +40,13 @@ blue = Blueprint('app_page',__name__)
 
 class Config(object):
       """配置参数"""
-      SQLALCHEMY_DATABASE_URI = "mysql://root:123321@192.168.1.104:8888/testcenter?charset=utf8"
-      # 设置sqlalchemy自动跟踪数据库
+      SQLALCHEMY_DATABASE_URI = "mysql://root:123321@192.168.1.108:8888/testcenter?charset=utf8"
+      #设置sqlalchemy自动跟踪数据库
       SQLALCHEMY_TRACE_MODIFICATIONS = True
+
+      DATABASE = 'flask.db'  # 数据库文件地址
+
+      #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 
 
 
@@ -53,7 +58,7 @@ def create_app():
     # 设置为24位的字符,每次运行服务器都是不同的，所以服务器启动一次上次的session就清除。
     # session类型为redis
     app.config['SESSION_TYPE'] = 'redis'
-    app.config['SESSION_REDIS'] = Redis(host='192.168.1.104', port=6379,db=15)
+    app.config['SESSION_REDIS'] = Redis(host='192.168.1.108', port=6379,db=15)
     # 添加前缀
     app.config['SESSION_KEY_PREFIX'] = 'flask'
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # 设置session的保存时间。
@@ -104,5 +109,56 @@ config = get_config()
 # 创建蓝图
 from views import appviews
 from views import loginviews
+from views import studentviews
+from views import hooksviews
+from views import gviews
+from views import signalsviews
+from views import fileviews
 app.register_blueprint(appviews.base)
 app.register_blueprint(loginviews.uer_login)
+app.register_blueprint(studentviews.student)
+app.register_blueprint(hooksviews.hooks)
+app.register_blueprint(gviews.blue)
+app.register_blueprint(fileviews.file)
+# app.register_blueprint(signalsviews.app)
+
+
+@app.route('/ping', methods=['GET'])
+def ping():
+    logger.info('ping')
+    return 'ping ok'
+
+
+
+@app.before_request
+def before_request():
+    print('before_request')
+
+
+@app.after_request
+def after_request(response):
+    print('after_request')
+    result = copy.copy(response.response)
+    try:
+        if isinstance(result[0], bytes):
+            result[0] = bytes.decode(result[0])
+        logger.info('url:{} ,method:{},返回数据:{}'.format(request.url, request.method, json.loads(result[0])))
+    except Exception as e:
+        logger.info(e)
+        logger.info('url:{} ,method:{}'.format(request.url, request.method))
+    return response
+
+
+@app.teardown_request
+def teardown_request(exception):
+    print('teardown_request')
+
+
+# @app.errorhandler(404)
+# def page_not_found(error):
+#     return render_template("error400.html"), 404
+#
+#
+# @app.errorhander(500)
+# def server_error(error):
+#     return render_template("error505.html"), 500
