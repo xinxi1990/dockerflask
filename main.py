@@ -25,6 +25,8 @@ from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_required, login_user, logout_user,current_user
+# from flask_debugtoolbar import DebugToolbarExtension
+from flask_mail import Mail, Message
 
 
 
@@ -49,6 +51,21 @@ class Config(object):
       #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 
 
+def create_mail():
+    app.config.update(
+        DEBUG=True,
+        MAIL_SERVER='smtp.126.com',
+        MAIL_PROT=25,
+        MAIL_USE_TLS=True,
+        MAIL_USE_SSL=False,
+        MAIL_USERNAME='autotestin@126.com',
+        MAIL_PASSWORD=os.environ.get('mail_password'),
+        MAIL_DEBUG=True
+
+    )
+    print(os.environ.get('mail_password'))
+
+
 
 def create_app():
     app = Flask(__name__)
@@ -62,7 +79,7 @@ def create_app():
     # 添加前缀
     app.config['SESSION_KEY_PREFIX'] = 'flask'
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)  # 设置session的保存时间。
-
+    app.config['SECRET_KEY'] = '11111111'
     # # 加载app的第一种方式
     # se = Session()
     # se.init_app(app=app)
@@ -73,7 +90,8 @@ def create_app():
     manager = Manager(app)
     sess = Session(app)
     sess.init_app(app)
-
+    app.debug = True
+    # toolbar = DebugToolbarExtension(app)
     return app
 
 app = create_app()
@@ -83,6 +101,9 @@ app.config.from_object(Config)
 
 db = SQLAlchemy(app) #初始化数据库
 db.create_all()
+
+create_mail() # 初始化邮件配置
+mail = Mail(app)
 
 
 # 获取登录管理对象
@@ -114,12 +135,14 @@ from views import hooksviews
 from views import gviews
 from views import signalsviews
 from views import fileviews
+from views import mailviews
 app.register_blueprint(appviews.base)
 app.register_blueprint(loginviews.uer_login)
 app.register_blueprint(studentviews.student)
 app.register_blueprint(hooksviews.hooks)
 app.register_blueprint(gviews.blue)
 app.register_blueprint(fileviews.file)
+app.register_blueprint(mailviews.new_mail)
 # app.register_blueprint(signalsviews.app)
 
 

@@ -4,12 +4,27 @@
 
 from flask import Flask
 from flask import render_template
+from flask_debugtoolbar import DebugToolbarExtension
 app = Flask(__name__)
+app.debug = True
+app.config['SECRET_KEY'] = 'TTC'
+
+toolbar = DebugToolbarExtension()
+toolbar.init_app(app)
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+
 
 
 @app.route('/connect', methods=['GET', 'POST'])
 def connect():
+    print("connect")
     return 'Service is runing...'
+
+
+@app.route('/html', methods=['GET', 'POST'])
+def html():
+    return render_template('login.html')
+
 
 
 @app.errorhandler(404)

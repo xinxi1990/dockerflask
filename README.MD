@@ -17,12 +17,31 @@ deactivate 退出虚拟环境
 
 # 本地调试
 ```
+export mail_password="xxx"
+
 python3 manage.py runserver
 ```
 
 # gunicorn运行命令
 ```
 gunicorn -w 1 -b 0.0.0.0:5000 manage:app -D
+```
+
+# uwsgi运行命令
+```
+pip install uwsgi
+
+uwsgi --http :9999 -s /tmp/app.sock --manage-script-name --mount /test=route:app
+
+uwsgi --http :9999 -s /tmp/app.sock --manage-script-name --mount /=main:app
+上下等价
+uwsgi --http :9999 -s /tmp/app.sock --manage-script-name --mount /=manage:app
+# manger应用
+
+uwsgi --ini uwsgi.ini -d /tmp/uwsgi.log
+# 使用配置文件
+pkill -f -9 uwsgi
+# 停止 uwsgi
 ```
 
 # docker构建
@@ -53,5 +72,22 @@ python3 manage.py create_db
 sudo supervisord -c supervisord.conf
 
 sudo supervisorctl status
+```
+
+# nginx
+```bash
+docker pull nginx 
+
+docker run --name nginx -p 8070:80 -v /Users/xinxi/Documents/sndd/dockerflask/nginx/nginx.conf:/etc/nginx/nginx.conf -v /Users/xinxi/Documents/sndd/dockerflask/nginx:/usr/share/nginx/html --restart always -d nginx
+```
+
+
+# 生成本地依赖
+```bash
+pip freeze > requirements.txt
+
+pip install pipreqs
+
+pipreqs ./
 ```
   

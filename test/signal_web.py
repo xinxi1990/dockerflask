@@ -1,5 +1,6 @@
 from flask import Flask,signals,render_template
 
+
 app = Flask(__name__)
 
 # 往信号中注册函数

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 # 导入扩展类
 from flask_wtf import FlaskForm

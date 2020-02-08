@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    首页页面
+{% endblock %}
+
+{% block content %}
+    <p>我是首页</p>
+    <p>当前登录系统用户为: {{ current_user.username }}</p>
+    <button><a href="/app/login/">登陆</a></button>
+{% endblock %}

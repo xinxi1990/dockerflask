@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-hans">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <div class="page">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </div>
+
+
+{#    <div style="background-color: red">{% block head %}{% endblock %}</div> <br>#}
+{#    <div style="background-color: yellow">{% block body %}{% endblock %}</div> <br>#}
+{#    <div style="background-color: green">{% block foot %}{% endblock %}</div>#}
+</body>
+</html>

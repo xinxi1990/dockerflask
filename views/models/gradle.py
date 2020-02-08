@@ -1,10 +1,14 @@
+# -*- coding: utf-8 -*-
 
-
-from views.models import *
 
 """
 学生类
 """
+
+
+from views.models import *
+
+
 
 
 class Gradle(db.Model):

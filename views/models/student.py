@@ -1,10 +1,12 @@
-
-
-from views.models import *
+# -*- coding: utf-8 -*-
 
 """
 学生类
 """
+
+from views.models import *
+
+
 
 class Student(db.Model):
 

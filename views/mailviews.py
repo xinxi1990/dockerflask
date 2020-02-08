@@ -1,9 +1,14 @@
-# -*- coding: utf-8 -*-
 
+# -*- coding: utf-8 -*-
 """
 上传文件
 """
-
+import sys
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
+# import codecs
+# print(sys.stdout.encoding)
+# sys.stdout = codecs.getwriter("utf-8")(sys.stdout.detach())
 import os
 import requests
 import json
@@ -31,33 +36,28 @@ from flask import Flask, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
 from main import config
 from main import logger
-from main import db,app
+from main import db,app,mail
 from views.models.user import UserModels
-from views.models.course import Course
-from views.models.student import Student
-from views.models.gradle import Gradle
-from views.models.course import sc
 from flask import render_template
+from flask_mail import Mail, Message
 
 
 
-
-file = Blueprint('file', __name__, url_prefix='/file')
-
-
-@file.route('/web', methods=['GET'])
-def web():
-    return render_template('files.html')
+new_mail = Blueprint('mail', __name__, url_prefix='/mail')
 
 
-@file.route('/save', methods=['POST'])
-def save():
-    # 获取图片
-    icons = request.files.get('icons')
-    # 保存save(path)
-    file_path = os.path.join(os.getcwd(), icons.filename)
-    icons.save(file_path)
-    return render_template('upload_ok.html')
+@new_mail.route("/send_mail")
+def send_mail():
+    """
+    发送邮件， sender为发送者邮箱， recipients为接受者邮箱
+    """
+    print(app.config["MAIL_USERNAME"])
+    message = Message("Hi!This is a test", sender=app.config["MAIL_USERNAME"], recipients=["xinxi1990@163.com"])
+    message.body = "Hi!This is a test"
+    message.html = "<h1>test body</h1>"
+    send_email(message)
+    return u"发送成功"
 
 
-
+def send_email(msg):
+    mail.send(msg)

@@ -12,7 +12,8 @@ def connect():
 @app.cli.command('hello')
 @click.option('--name', default='World')
 def hello_command(name):
-    click.echo(f'Hello, {name}!')
+    # click.echo(f'Hello, {name}!')
+    pass
 
 def test_hello():
     runner = app.test_cli_runner()
