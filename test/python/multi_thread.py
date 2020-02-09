@@ -6,7 +6,7 @@
 多线程
 """
 
-
+"""
 import time
 import threading
 
@@ -42,13 +42,75 @@ thread2.run()
 # 在你的子线程没有中止或者运行完之前，你的主线程都不会结束
 #thread1.join()
 
-
-
 # 线程执行结束的输出提示
 print('备份结束')
 
+"""
+
+# import os
+# import time
+# import threading
+#
+# def task():
+#
+#     print(t.getName())
+#     print(threading.current_thread().name)
+#     print('task')
+#     time.sleep(3)
+#
+#
+#
+# t = threading.Thread(target=task, name='LoopThread')
+#
+# t.daemon = True
+#
+# t.start()
+#
+# # t.join()
+#
+#
+#
+# print(threading.current_thread().name)
+
+
+# ================================
+
+"""
+线程池
+"""
 
 
 
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 
+import threadpool
+import time
 
+def sayhello (a):
+    print("hello: "+a)
+    time.sleep(2)
+
+def main():
+    global result
+    seed=["a","b","c"]
+    start = time.time()
+
+    task_pool = threadpool.ThreadPool(5)
+    requests = threadpool.makeRequests(sayhello,seed)
+
+    for req in requests:
+        task_pool.putRequest(req)
+    task_pool.wait()
+    end = time.time()
+    time_m = end-start
+    print("time: "+str(time_m))
+
+    start1 = time.time()
+    for each in seed:
+        sayhello(each)
+    end1 = time.time()
+    print("time1: "+str(end1-start1))
+
+if __name__ == '__main__':
+    main()

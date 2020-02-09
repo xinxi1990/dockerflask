@@ -22,7 +22,7 @@ l = []
 def test1(n):
     lock.acquire()
     l.append(n)
-    print l
+    print(l)
     lock.release()
     """
     [0]
@@ -39,7 +39,7 @@ def test1(n):
 
 def test(n):
     l.append(n)
-    print l
+    print(l)
 
 
 def main():
@@ -68,7 +68,7 @@ import time
 
 def process_test(n):
     l.append(n)
-    print l
+    print(l)
     """
     [0]
     [1]

@@ -34,23 +34,23 @@ def request_baidu(i):
 
 
 if __name__ == '__main__':
-    # p1 = Process(target=coding)
-    # p2 = Process(target=coding)
-    # p3 = Process(target=play_weixin)
+    p1 = Process(target=coding)
+    p2 = Process(target=coding)
+    p3 = Process(target=play_weixin)
+    # 启动进程
+    p1.start()
+    # 阻塞进程p1
+    p1.join()
+    # 后面p1和p2不能执行
+
     # # 启动进程
-    # p1.start()
-    # # 阻塞进程p1
-    # p1.join()
-    # # 后面p1和p2不能执行
-    #
-    # # # 启动进程
-    # p2.start()
-    # p3.start()
-    #
-    # # 主进程
-    # while True:
-    #     time.sleep(3)
-    #     print('我是主进程，PID是%s' % os.getpid())
+    p2.start()
+    p3.start()
+
+    # 主进程
+    while True:
+        time.sleep(3)
+        print('我是主进程，PID是%s' % os.getpid())
 
 
     def do_work(thread_id):
