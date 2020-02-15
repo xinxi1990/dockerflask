@@ -27,6 +27,7 @@ def get_mysql_connect():
     g.cursor = cursor
 
 
+
 @blue.before_request
 def create_student_table():
     # 创建student表

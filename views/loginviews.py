@@ -30,6 +30,7 @@ from main import config
 from main import logger
 from main import db,app
 from views.models.user import UserModels
+import pysnooper
 
 
 
@@ -44,7 +45,7 @@ def ping():
     return 'ping ok'
 
 
-
+@pysnooper.snoop()
 @uer_login.route('/register/', methods=['GET', 'POST'])
 def register():
     form = UserForm()
