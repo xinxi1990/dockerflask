@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        {% macro show_goods(id, name) %}
+            商品id：{{ id }}
+            商品名称：{{ name }}
+        {% endmacro %}
+
+        {{ show_goods('1', '娃哈哈') }}
+        <br>
+        {{ show_goods('2', '雪碧') }}
+    </div>
+</body>
+</html>

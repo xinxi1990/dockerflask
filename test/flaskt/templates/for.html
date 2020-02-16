@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for item in cols %}
+            aa_{{ item }}
+    {% endfor %}
+
+    {% for score in cols %}
+            {% if loop.first %}
+                <li style="color:red;">{{ loop.revindex }}:{{ loop.index }}:{{ score }}</li>
+            {% elif loop.last %}
+                <li style="color:green;">{{ loop.revindex }}:{{ loop.index }}:{{ score }}</li>
+            {% else %}
+                <li> {{ loop.revindex }}:{{ loop.index }}:{{ score }}</li>
+            {% endif %}
+    {% endfor %}
+
+
+
+    <ul>
+        <li>{{ content_h2 }}</li>
+        <li>{{ content_h2|safe }}</li>
+        <li>{{ content_h2|striptags }}</li>
+
+        <li>{{ content_h2 }}</li>
+        <li>{{ content_h2|length }}</li>
+        <li>{{ content_h2|trim|safe }}</li>
+        <li>{{ content_h2|trim|length }}</li>
+    </ul>
+
+
+</body>
+</html>
+<script>
+    var content_h2 = '<h2>今天你们真帅</h2>'
+</script>

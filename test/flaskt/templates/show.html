@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+　  <link rel="stylesheet" href="{{ url_for('static',filename='static.css') }}">　　　　
+{#    #加载、static目录下的css目录下的index.css文件#}
+　　 <script src="{{ url_for('static',filename='static.js') }}"></script>　　　　　　　　
+{#    　#加载js文件#}
+<body>
+
+　　<div class="nav">
+        <ul>
+            <li><a href="{{ url_for('user_login') }}">登陆</a></li>　　　　
+{#            #点击登陆从index跳转到login页面#}
+            <li><a href="#">发布问答</a></li>
+　　　　　　　
+        </ul>
+    </div>
+</body>
+</html>
